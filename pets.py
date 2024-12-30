@@ -1,6 +1,6 @@
-from tipo import Tipo
-from porte import Porte
-from hospedado import Hospedado
+from python.tipo import Tipo
+from python.porte import Porte
+from python.hospedado import Hospedado
 
 class Pets:
     def __init__(self, nome_tutor: str, tipo_pet: Tipo, nome_pet: str, raca_pet: str, porte_pet: Porte, hospedado: Hospedado, qtd_dias: int, historico_qtd_hospedagem: int, observacoes: str):

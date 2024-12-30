@@ -1,6 +1,8 @@
 from util import menu
 
-print('🐱 Bem-vindo à Simulação de Controle do Hotel Pet! 🐶')
+print('=====================================================')
+print('🐾 Bem-vindo à Simulação de Controle do Hotel Pet! 🐾')
+print('=====================================================')
 print('')
 
 if __name__ == '__main__':
