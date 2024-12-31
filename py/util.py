@@ -140,8 +140,10 @@ def editar_pet():
 	elif aux_nome_tutor_input in ['Não', 'NÃO', 'não', 'Nao', 'NAO', 'nao', 'n', 'N']:
 		nome_tutor_verificado = Resposta.NAO
 	elif aux_nome_tutor_input == '':
+		print('')
 		raise ValueError('A resposta do nome do tutor não pode estar vazia.')
 	else:
+		print('')
 		raise ValueError('Resposta inválida.')
 	
 	nome_tutor_input = Resposta(nome_tutor_verificado)
@@ -162,8 +164,10 @@ def editar_pet():
 	elif aux_tipo_pet_input in ['Não', 'NÃO', 'não', 'Nao', 'NAO', 'nao', 'n', 'N']:
 		tipo_pet_verificado = Resposta.NAO
 	elif aux_tipo_pet_input == '':
+		print('')
 		raise ValueError('A resposta do tipo do pet não pode estar vazia.')
 	else:
+		print('')
 		raise ValueError('Resposta inválida.')
 	
 	tipo_pet_input = Resposta(tipo_pet_verificado)
@@ -194,8 +198,10 @@ def editar_pet():
 	elif aux_nome_pet_input in ['Não', 'NÃO', 'não', 'Nao', 'NAO', 'nao', 'n', 'N']:
 		nome_pet_verificado = Resposta.NAO
 	elif aux_nome_pet_input == '':
+		print('')
 		raise ValueError('A resposta do nome do pet não pode estar vazia.')
 	else:
+		print('')
 		raise ValueError('Resposta inválida.')
 	
 	nome_pet_input = Resposta(nome_pet_verificado)
@@ -216,8 +222,10 @@ def editar_pet():
 	elif aux_raca_pet_input in ['Não', 'NÃO', 'não', 'Nao', 'NAO', 'nao', 'n', 'N']:
 		raca_pet_verificado = Resposta.NAO
 	elif aux_raca_pet_input == '':
+		print('')
 		raise ValueError('A resposta da raça não pode estar vazia.')
 	else:
+		print('')
 		raise ValueError('Resposta inválida.')
 	
 	raca_pet_input = Resposta(raca_pet_verificado)
@@ -238,8 +246,10 @@ def editar_pet():
 	elif aux_porte_pet_input in ['Não', 'NÃO', 'não', 'Nao', 'NAO', 'nao', 'n', 'N']:
 		porte_pet_verificado = Resposta.NAO
 	elif aux_porte_pet_input == '':
+		print('')
 		raise ValueError('A resposta do tipo do pet não pode estar vazia.')
 	else:
+		print('')
 		raise ValueError('Resposta inválida.')
 	
 	porte_pet_input = Resposta(porte_pet_verificado)
@@ -336,7 +346,13 @@ def listar_pets():
 			raise ValueError(f'Não há pets cadastrados.')
 		else:
 			for pet in pets:
-				print(f'    Id: {pet.id}, Nome do tutor: {pet.nome_tutor}, Tipo: {pet.tipo_pet}, Nome do pet: {pet.nome_pet}, Raça: {pet.raca_pet}, Porte: {pet.porte_pet} ')
+				print(f'   Id: {pet.id}')
+				print(f'   Nome do tutor: {pet.nome_tutor}')
+				print(f'   Tipo: {pet.tipo_pet}')
+				print(f'   Nome do pet: {pet.nome_pet}')
+				print(f'   Raça: {pet.raca_pet}')
+				print(f'   Porte: {pet.porte_pet}')
+				print('')
 
 		print('')
 
@@ -400,6 +416,7 @@ def entrada_hotel_pet():
 		if pet is None:
 			print('')
 			raise ValueError(f'Tutor {nome_tutor_input} não encontrado, efetue o cadastro primeiro.')
+		
 		else:
 			print(f'   Nome do tutor: {pet.nome_tutor}')
 			print(f'   Tipo: {pet.tipo_pet}')
@@ -416,8 +433,10 @@ def entrada_hotel_pet():
 	elif aux_dados_resposta in ['Não', 'NÃO', 'não', 'Nao', 'NAO', 'nao', 'n', 'N']:
 		dados_resposta_verificado = Resposta.NAO
 	elif aux_dados_resposta == '':
+		print('')
 		raise ValueError('A resposta não pode estar vazia.')
 	else:
+		print('')
 		raise ValueError('Resposta inválida.')
 	
 	dados_resposta_input = Resposta(dados_resposta_verificado)
@@ -425,8 +444,12 @@ def entrada_hotel_pet():
 	if dados_resposta_input.value == 'Sim':
 		hospedado = Resposta.SIM
 
-		qtd_dias = int(input('Quantidade de diárias no Hotel Pet: '))
-		print('')
+		try:
+			qtd_dias = int(input('Quantidade de diárias no Hotel Pet: '))
+			print('')
+		except:
+			print('')
+			raise ValueError('Digite um número inteiro válido.')
 
 		with Session(engine) as sessao:
 
@@ -443,7 +466,6 @@ def entrada_hotel_pet():
 				print('')
 					
 		aux_observacoes = input(f'A observação é "{pesquisa_tutor[0]}". \n   Alterar informação? (Sim ou Não). ')
-		print('')
 
 		observacoes_verificado = None
 		if aux_observacoes in ['Sim', 'SIM', 'sim', 's', 'S']:
@@ -451,8 +473,10 @@ def entrada_hotel_pet():
 		elif aux_observacoes in ['Não', 'NÃO', 'não', 'Nao', 'NAO', 'nao', 'n', 'N']:
 			observacoes_verificado = Resposta.NAO
 		elif aux_observacoes == '':
+			print('')
 			raise ValueError('A resposta não pode estar vazia.')
 		else:
+			print('')
 			raise ValueError('Resposta inválida.')
 		
 		observacoes_resposta = Resposta(observacoes_verificado)
@@ -488,25 +512,205 @@ def entrada_hotel_pet():
 		print('Retornando ao menu principal...')
 		print('')
 
-	# saida
-	# nome do tutor
-	# confirmar infos - nome tutor, nome pet, porte pet, historico
-	# resposta
-	# se sim, continua
-	# se nao, retorna ao menu
-	# total a pagar: custo(porte) * qtd_dias.
-	# pagamento efetuado? sim não
-	# se sim, continua
-	# se nao, volta ao menu
-	# historico =+
+def saida_hotel_pet():
+	print('')
+	print('Saída Hotel Pet: ')
+	print('')
 
-	# adicionar opcao de infos de preço
+	nome_tutor_input = input('Nome do tutor: ')
+	print('')
+	if nome_tutor_input == '':
+		raise ValueError('O nome do tutor não pode estar vazio.')
+
+	with Session(engine) as sessao:
+
+		parametros = {
+			'nome_tutor': nome_tutor_input
+		}
+
+		try:
+			pet = sessao.execute(text("SELECT nome_tutor, tipo_pet, nome_pet, porte_pet, hospedado, qtd_dias, historico_qtd_hospedagem FROM pets WHERE nome_tutor = :nome_tutor"), parametros).first()
+
+		except IntegrityError as ex:
+			print('')
+			print(f'❌ Ocorreu um erro de rede ao efetuar a saída no hotel pet. ❌')
+			print('')
+
+		if pet is None:
+			print('')
+			raise ValueError(f'Tutor {nome_tutor_input} não encontrado, efetue o cadastro primeiro.')
+		if pet.hospedado == 'Não':
+			print('')
+			raise ValueError(f'O pet não está no Hotel Pet. Efetue a entrada primeiro.')
+		else:
+			print(f'   Nome do tutor: {pet.nome_tutor}')
+			print(f'   Tipo: {pet.tipo_pet}')
+			print(f'   Nome do pet: {pet.nome_pet}')
+			print(f'   Porte: {pet.porte_pet}')
+			print(f'   Hospedado: {pet.hospedado}')
+			print(f'   Diárias: {pet.qtd_dias}')
+			print('')
+		
+	aux_dados_resposta = input('As informações estão corretas? (Sim ou Não). ')
+	print('')
+
+	dados_resposta_verificado = None
+	if aux_dados_resposta in ['Sim', 'SIM', 'sim', 's', 'S']:
+		dados_resposta_verificado = Resposta.SIM
+	elif aux_dados_resposta in ['Não', 'NÃO', 'não', 'Nao', 'NAO', 'nao', 'n', 'N']:
+		dados_resposta_verificado = Resposta.NAO
+	elif aux_dados_resposta == '':
+		print('')
+		raise ValueError('A resposta não pode estar vazia.')
+	else:
+		print('')
+		raise ValueError('Resposta inválida.')
+	
+	dados_resposta_input = Resposta(dados_resposta_verificado)
+
+	if dados_resposta_input.value == 'Sim':
+		porte_pet = pet.porte_pet
+		qtd_dias = pet.qtd_dias
+
+		if porte_pet == 'Pequeno':
+			diaria = 90
+			total_a_pagar = diaria * qtd_dias
+
+			print(f'Total a pagar: R$ {total_a_pagar:,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.'))
+
+		if porte_pet == 'Médio':
+			diaria = 120
+			total_a_pagar = diaria * qtd_dias
+
+			print(f'Total a pagar: R$ {total_a_pagar:,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.'))
+
+		if porte_pet == 'Grande':
+			diaria = 150
+			total_a_pagar = diaria * qtd_dias
+
+			print(f'Total a pagar: R$ {total_a_pagar:,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.'))
+
+		aux_dados_resposta = input('Pagamento efetuado? (Sim ou Não). ')
+
+		dados_resposta_verificado = None
+		if aux_dados_resposta in ['Sim', 'SIM', 'sim', 's', 'S']:
+			dados_resposta_verificado = Resposta.SIM
+		elif aux_dados_resposta in ['Não', 'NÃO', 'não', 'Nao', 'NAO', 'nao', 'n', 'N']:
+			dados_resposta_verificado = Resposta.NAO
+		elif aux_dados_resposta == '':
+			print('')
+			raise ValueError('A resposta não pode estar vazia.')
+		else:
+			print('')
+			raise ValueError('Resposta inválida.')
+		
+		dados_resposta_input = Resposta(dados_resposta_verificado)
+
+		if dados_resposta_input.value == 'Sim':
+			hospedado = Resposta.NAO
+			qtd_dias = 0
+			historico_qtd_hospedagem = pet.historico_qtd_hospedagem
+			historico_qtd_hospedagem += 1
+
+			with Session(engine) as sessao, sessao.begin():
+				parametros = {
+					'hospedado': hospedado.value,
+					'qtd_dias': qtd_dias,
+					'historico_qtd_hospedagem': historico_qtd_hospedagem,
+					'nome_tutor':nome_tutor_input
+				}
+
+				try:
+					sessao.execute(text("UPDATE pets SET hospedado = :hospedado, qtd_dias = :qtd_dias, historico_qtd_hospedagem = :historico_qtd_hospedagem WHERE nome_tutor = :nome_tutor"), parametros)
+					print('')
+					print(f'✅ Saída no Hotel Pet confirmada! ✅')
+					print('')
+
+				except IntegrityError as ex:
+					print('')
+					print(f'❌ Ocorreu um erro de rede ao efetuar a saída no Hotel Pet. ❌')
+					print('')
+
+		if dados_resposta_input.value == 'Não':
+			print('Retornando ao menu principal...')
+			print('')
+
+	if dados_resposta_input.value == 'Não':
+		print('Retornando ao menu principal...')
+		print('')
+
+
+def listagem_hotel_pet():
+	print('')
+	print('Listagem de Pets no Hotel Pet:')
+	print('')
+
+	with Session(engine) as sessao:
+
+		try:
+			pets = sessao.execute(text("SELECT id, nome_tutor, tipo_pet, nome_pet, raca_pet, porte_pet, qtd_dias FROM pets WHERE hospedado = 'Sim' ORDER BY nome_tutor"))
+
+		except IntegrityError as ex:
+			print('')
+			print(f'❌ Ocorreu um erro de rede ao listar os pets no Hotel Pet. ❌')
+			print('')
+
+		if pets.rowcount == 0:
+			print(f'   Não há pets no Hotel Pet.')
+		else:
+			for pet in pets:
+				print(f'   Id: {pet.id}')
+				print(f'   Nome do tutor: {pet.nome_tutor}')
+				print(f'   Tipo: {pet.tipo_pet}')
+				print(f'   Nome do pet: {pet.nome_pet}')
+				print(f'   Raça: {pet.raca_pet}')
+				print(f'   Porte: {pet.porte_pet}')
+				print(f'   Diárias: {pet.qtd_dias}')
+				print('')
+
+	print('')
+	print('Listagem de Histórico do Hotel Pet')
+	print('')
+
+	with Session(engine) as sessao:
+
+		try:
+			pets = sessao.execute(text("SELECT id, nome_tutor, tipo_pet, nome_pet, raca_pet, porte_pet, historico_qtd_hospedagem FROM pets WHERE hospedado = 'Não' AND historico_qtd_hospedagem >= 1 ORDER BY nome_tutor"))
+
+		except IntegrityError as ex:
+			print('')
+			print(f'❌ Ocorreu um erro de rede ao listar o histórico do Hotel Pet. ❌')
+			print('')
+
+		if pets.rowcount == 0:
+			print(f'   Não há pets no histórico do Hotel Pet.')
+		else:
+			for pet in pets:
+				print(f'   Id: {pet.id}')
+				print(f'   Nome do tutor: {pet.nome_tutor}')
+				print(f'   Tipo: {pet.tipo_pet}')
+				print(f'   Nome do pet: {pet.nome_pet}')
+				print(f'   Raça: {pet.raca_pet}')
+				print(f'   Porte: {pet.porte_pet}')
+				print(f'   Quantidade de hospedagens: {pet.historico_qtd_hospedagem}')
+				print('')
+
+def precos_diarias():
+	print('')
+	print("+-------------------+------------------------+")
+	print("| Porte do Pet      | Preço da Diária (R$)   |")
+	print("+-------------------+------------------------+")
+	print("| Pequeno           | 90,00                  |")
+	print("| Médio             | 120,00                 |")
+	print("| Grande            | 150,00                 |")
+	print("+-------------------+------------------------+")
+	print('')
 
 def menu():
 	opcao = 1
 
 	while opcao > 0:
-		print('''Escolha uma opção:
+		print('''Escolha uma opção:\n
 	0 - Sair
 	1 - Adicionar Pet
 	2 - Editar Pet
@@ -516,6 +720,7 @@ def menu():
 	6 - Entrada Hotel Pet
 	7 - Saída Hotel Pet
 	8 - Listagem Hotel Pet
+	9 - Preços das Diárias
 	''')
 		opcao = int(input("Opção: "))
 
@@ -578,6 +783,14 @@ def menu():
 		elif opcao == 8:
 			try:
 				listagem_hotel_pet()
+			except ValueError as e:
+				print(f'❌ Erro: {e} ❌')
+				print('Retornando ao menu principal...')
+				print('')
+
+		elif opcao == 9:
+			try:
+				precos_diarias()
 			except ValueError as e:
 				print(f'❌ Erro: {e} ❌')
 				print('Retornando ao menu principal...')
