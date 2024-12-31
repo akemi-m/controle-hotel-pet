@@ -1,6 +1,6 @@
-from python.tipo import Tipo
-from python.porte import Porte
-from python.hospedado import Hospedado
+from tipo import Tipo
+from porte import Porte
+from hospedado import Hospedado
 
 class Pets:
     def __init__(self, nome_tutor: str, tipo_pet: Tipo, nome_pet: str, raca_pet: str, porte_pet: Porte, hospedado: Hospedado, qtd_dias: int, historico_qtd_hospedagem: int, observacoes: str):
@@ -15,5 +15,5 @@ class Pets:
         self.observacoes = observacoes
 
     def __str__(self):
-        return f'\nNome do tutor: {self.nome_tutor}, \nTipo: {self.tipo_pet}, \nNome do pet: {self.nome_pet}, \nRaça: {self.raca_pet}, \nPorte: {self.porte_pet}.\n'
+        return f'\nNome do tutor: {self.nome_tutor}, \nTipo: {self.tipo_pet}, \nNome do pet: {self.nome_pet}, \nRaça: {self.raca_pet}, \nPorte: {self.porte_pet}.\nEstá hospedado? {self.hospedado} \nHá quantos dias? {self.qtd_dias} \nHistórico de hospedagem: {self.historico_qtd_hospedagem} \nObservações: {self.observacoes}'
     

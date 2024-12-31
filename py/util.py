@@ -2,10 +2,10 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from pets import Pets
-from python.tipo import Tipo
-from python.porte import Porte
-from python.hospedado import Hospedado
-from python.resposta import Resposta
+from tipo import Tipo
+from porte import Porte
+from hospedado import Hospedado
+from resposta import Resposta
 
 engine = create_engine('mysql+mysqlconnector://root:root@localhost/hotel-pet')
 
@@ -16,13 +16,13 @@ def adicionar_pet():
 	print('')
 	
 	nome_tutor_input = input('    Nome do tutor: ')
+	if nome_tutor_input == '':
+		raise ValueError('O nome do tutor não pode estar vazio.')
 
 	with Session(engine) as sessao:
-		if nome_tutor_input == '':
-			raise ValueError('O nome do tutor não pode estar vazio.')
 		
 		pesquisa_tutor = sessao.execute(text("SELECT nome_tutor FROM pets WHERE nome_tutor = :nome_tutor"), {'nome_tutor': nome_tutor_input}).first()
-
+		
 		if pesquisa_tutor is not None:
 			print('')
 			raise ValueError(f'Tutor {nome_tutor_input} já cadastrado!')
@@ -98,7 +98,7 @@ def adicionar_pet():
 
 		except IntegrityError as ex:
 			print('')
-			print(f'❌ Ocorreu um erro ao cadastrar o pet. ❌')
+			print(f'❌ Ocorreu um erro de rede ao cadastrar o pet. ❌')
 			print('')
 
 def editar_pet():
@@ -113,11 +113,19 @@ def editar_pet():
 		raise ValueError('O nome do tutor não pode estar vazio.')
 
 	with Session(engine) as sessao:
-		if nome_tutor_input == '':
-			raise ValueError('O nome do tutor não pode estar vazio.')
-		
-		pesquisa_tutor = sessao.execute(text("SELECT nome_tutor, tipo_pet, nome_pet, raca_pet, porte_pet FROM pets WHERE nome_tutor = :nome_tutor"), {'nome_tutor': nome_tutor_input}).first()
 
+		parametros = {
+			'nome_tutor': nome_tutor_input
+		}
+
+		try:
+			pesquisa_tutor = sessao.execute(text("SELECT nome_tutor, tipo_pet, nome_pet, raca_pet, porte_pet FROM pets WHERE nome_tutor = :nome_tutor"), parametros).first()
+
+		except IntegrityError as ex:
+			print('')
+			print(f'❌ Ocorreu um erro de rede ao editar o pet. ❌')
+			print('')
+				
 		if pesquisa_tutor is None:
 			print('')
 			raise ValueError(f'Tutor {nome_tutor_input} não encontrado, efetue o cadastro primeiro.')
@@ -164,9 +172,9 @@ def editar_pet():
 		aux_tipo_pet = input('      Novo tipo (Gato ou Cachorro): ')
 		tipo_verificado = None
 
-		if aux_tipo_pet in ['Gato', 'GATO', 'gato']:
+		if aux_tipo_pet in ['Gato', 'GATO', 'gato', 'g', 'G']:
 			tipo_verificado = Tipo.GATO
-		elif aux_tipo_pet in ['Cachorro', 'cachorro', 'CACHORRO']:
+		elif aux_tipo_pet in ['Cachorro', 'cachorro', 'CACHORRO', 'c', 'C']:
 			tipo_verificado = Tipo.CACHORRO
 		elif aux_tipo_pet == '':
 			raise ValueError('O tipo do pet não pode estar vazio.')
@@ -265,15 +273,15 @@ def editar_pet():
 			'nome_tutor_original_sql': nome_tutor_original_sql
 		}
 
-		resultado = sessao.execute(text("UPDATE pets SET nome_tutor = :nome_tutor, tipo_pet = :tipo_pet, nome_pet = :nome_pet, raca_pet = :raca_pet, porte_pet = :porte_pet WHERE nome_tutor = :nome_tutor_original_sql"), parametros)
-
-		if resultado.rowcount == 0:
-			print('')
-			print(f'❌ Ocorreu um erro. ❌')
-			print('')
-		else:
+		try:
+			sessao.execute(text("UPDATE pets SET nome_tutor = :nome_tutor, tipo_pet = :tipo_pet, nome_pet = :nome_pet, raca_pet = :raca_pet, porte_pet = :porte_pet WHERE nome_tutor = :nome_tutor_original_sql"), parametros)
 			print('')
 			print(f'✅ Informações editadas com sucesso! ✅')
+			print('')
+
+		except IntegrityError as ex:
+			print('')
+			print(f'❌ Ocorreu um erro de rede ao editar o pet. ❌')
 			print('')
 
 def consultar_pet():
@@ -290,11 +298,16 @@ def consultar_pet():
 			'nome_tutor': nome_tutor_input
 		}
 
-		pet = sessao.execute(text("SELECT id, nome_tutor, tipo_pet, nome_pet, raca_pet, porte_pet FROM pets WHERE nome_tutor = :nome_tutor"), parametros).first()
+		try:
+			pet = sessao.execute(text("SELECT id, nome_tutor, tipo_pet, nome_pet, raca_pet, porte_pet FROM pets WHERE nome_tutor = :nome_tutor"), parametros).first()
 
-		if pet == None:
-			print(f'Nome do tutor {pet} não encontrado!')
+		except IntegrityError as ex:
 			print('')
+			print(f'❌ Ocorreu um erro de rede ao consultar o pet. ❌')
+			print('')
+
+		if pet is None:
+			raise ValueError(f'Nome do tutor {pet} não encontrado!')
 		else:
 			print(f'   Id: {pet.id}')
 			print(f'   Nome do tutor: {pet.nome_tutor}')
@@ -311,10 +324,19 @@ def listar_pets():
 	print('')
 
 	with Session(engine) as sessao:
-		pets = sessao.execute(text("SELECT id, nome_tutor, tipo_pet, nome_pet, raca_pet, porte_pet FROM pets ORDER BY nome_tutor"))
 
-		for pet in pets:
-			print(f'    Id: {pet.id}, Nome do tutor: {pet.nome_tutor}, Tipo: {pet.tipo_pet}, Nome do pet: {pet.nome_pet}, Raça: {pet.raca_pet}, Porte: {pet.porte_pet} ')
+		try:
+			pets = sessao.execute(text("SELECT id, nome_tutor, tipo_pet, nome_pet, raca_pet, porte_pet FROM pets ORDER BY nome_tutor"))
+
+		except IntegrityError as ex:
+			print('')
+			print(f'❌ Ocorreu um erro de rede ao listar os pets. ❌')
+			print('')
+		if pets.rowcount == 0:
+			raise ValueError(f'Não há pets cadastrados.')
+		else:
+			for pet in pets:
+				print(f'    Id: {pet.id}, Nome do tutor: {pet.nome_tutor}, Tipo: {pet.tipo_pet}, Nome do pet: {pet.nome_pet}, Raça: {pet.raca_pet}, Porte: {pet.porte_pet} ')
 
 		print('')
 
@@ -325,23 +347,160 @@ def excluir_pet():
 	print('')
 
 	nome_tutor_input = input('Nome do tutor: ')
+	if nome_tutor_input == '':
+		raise ValueError('O nome do tutor não pode estar vazio.')
 
 	with Session(engine) as sessao, sessao.begin():
 		parametros = {
 			'nome_tutor': nome_tutor_input
 		}
 
-		resultado = sessao.execute(text("DELETE FROM pets WHERE nome_tutor = :nome_tutor"), parametros)
+		try:
+			resultado = sessao.execute(text("DELETE FROM pets WHERE nome_tutor = :nome_tutor"), parametros)
+
+		except IntegrityError as ex:
+			print('')
+			print(f'❌ Ocorreu um erro de rede ao excluir o pet. ❌')
+			print('')
 
 		if resultado.rowcount == 0:
 			print('')
-			print(f'❌ Nome do tutor {nome_tutor_input} não está cadastrado. ❌')
+			print(f'❌ Não é possível excluir um contato não cadastrado. ❌')
 			print('')
-
 		else:
 			print('')
 			print(f'✅ Pet excluído com sucesso! ✅')
 			print('')
+
+def entrada_hotel_pet():
+
+	print('')
+	print('Entrada Hotel Pet: ')
+	print('')
+
+	nome_tutor_input = input('Nome do tutor: ')
+	print('')
+	if nome_tutor_input == '':
+		raise ValueError('O nome do tutor não pode estar vazio.')
+
+	with Session(engine) as sessao:
+
+		try:
+			pet = sessao.execute(text("SELECT nome_tutor, tipo_pet, nome_pet, porte_pet, hospedado FROM pets WHERE nome_tutor = :nome_tutor"), {'nome_tutor': nome_tutor_input}).first()
+
+		except IntegrityError as ex:
+			print('')
+			print(f'❌ Ocorreu um erro de rede ao efetuar a entrada no hotel pet. ❌')
+			print('')
+
+		if pet.hospedado == 'Sim':
+			print('')
+			raise ValueError(f'O pet já está no Hotel Pet')
+
+		if pet is None:
+			print('')
+			raise ValueError(f'Tutor {nome_tutor_input} não encontrado, efetue o cadastro primeiro.')
+		else:
+			print(f'   Nome do tutor: {pet.nome_tutor}')
+			print(f'   Tipo: {pet.tipo_pet}')
+			print(f'   Nome do pet: {pet.nome_pet}')
+			print(f'   Porte: {pet.porte_pet}')
+			print('')
+		
+	aux_dados_resposta = input('As informações estão corretas? (Sim ou Não). ')
+	print('')
+
+	dados_resposta_verificado = None
+	if aux_dados_resposta in ['Sim', 'SIM', 'sim', 's', 'S']:
+		dados_resposta_verificado = Resposta.SIM
+	elif aux_dados_resposta in ['Não', 'NÃO', 'não', 'Nao', 'NAO', 'nao', 'n', 'N']:
+		dados_resposta_verificado = Resposta.NAO
+	elif aux_dados_resposta == '':
+		raise ValueError('A resposta não pode estar vazia.')
+	else:
+		raise ValueError('Resposta inválida.')
+	
+	dados_resposta_input = Resposta(dados_resposta_verificado)
+
+	if dados_resposta_input.value == 'Sim':
+		hospedado = Resposta.SIM
+
+		qtd_dias = int(input('Quantidade de diárias no Hotel Pet: '))
+		print('')
+
+		with Session(engine) as sessao:
+
+			parametros = {
+				'nome_tutor': nome_tutor_input
+			}
+
+			try:
+				pesquisa_tutor = sessao.execute(text("SELECT observacoes FROM pets WHERE nome_tutor = :nome_tutor"), parametros).first()
+
+			except IntegrityError as ex:
+				print('')
+				print(f'❌ Ocorreu um erro de rede ao efetuar a entrada no hotel pet. ❌')
+				print('')
+					
+		aux_observacoes = input(f'A observação é "{pesquisa_tutor[0]}". \n   Alterar informação? (Sim ou Não). ')
+		print('')
+
+		observacoes_verificado = None
+		if aux_observacoes in ['Sim', 'SIM', 'sim', 's', 'S']:
+			observacoes_verificado = Resposta.SIM
+		elif aux_observacoes in ['Não', 'NÃO', 'não', 'Nao', 'NAO', 'nao', 'n', 'N']:
+			observacoes_verificado = Resposta.NAO
+		elif aux_observacoes == '':
+			raise ValueError('A resposta não pode estar vazia.')
+		else:
+			raise ValueError('Resposta inválida.')
+		
+		observacoes_resposta = Resposta(observacoes_verificado)
+
+		if observacoes_resposta.value == 'Sim':
+			observacoes = input('Nova observação: ')
+
+			if observacoes == '':
+				raise ValueError('A resposta não pode estar vazia.')
+		else:
+			observacoes = pesquisa_tutor[0]
+
+		with Session(engine) as sessao, sessao.begin():
+			parametros = {
+				'nome_tutor': nome_tutor_input,
+				'hospedado': hospedado.value,
+				'qtd_dias': qtd_dias,
+				'observacoes': observacoes
+			}
+
+			try:
+				sessao.execute(text("UPDATE pets SET hospedado = :hospedado, qtd_dias = :qtd_dias, observacoes = :observacoes WHERE nome_tutor = :nome_tutor"), parametros)
+				print('')
+				print(f'✅ Entrada no Hotel Pet confirmada! ✅')
+				print('')
+
+			except IntegrityError as ex:
+				print('')
+				print(f'❌ Ocorreu um erro de rede ao efetuar a entrada no Hotel Pet. ❌')
+				print('')
+
+	if dados_resposta_input.value == 'Não':
+		print('Retornando ao menu principal...')
+		print('')
+
+	# saida
+	# nome do tutor
+	# confirmar infos - nome tutor, nome pet, porte pet, historico
+	# resposta
+	# se sim, continua
+	# se nao, retorna ao menu
+	# total a pagar: custo(porte) * qtd_dias.
+	# pagamento efetuado? sim não
+	# se sim, continua
+	# se nao, volta ao menu
+	# historico =+
+
+	# adicionar opcao de infos de preço
 
 def menu():
 	opcao = 1
@@ -354,6 +513,9 @@ def menu():
 	3 - Consultar Pet
 	4 - Listar Pets
 	5 - Excluir Pet
+	6 - Entrada Hotel Pet
+	7 - Saída Hotel Pet
+	8 - Listagem Hotel Pet
 	''')
 		opcao = int(input("Opção: "))
 
@@ -392,6 +554,30 @@ def menu():
 		elif opcao == 5:
 			try:
 				excluir_pet()
+			except ValueError as e:
+				print(f'❌ Erro: {e} ❌')
+				print('Retornando ao menu principal...')
+				print('')
+
+		elif opcao == 6:
+			try:
+				entrada_hotel_pet()
+			except ValueError as e:
+				print(f'❌ Erro: {e} ❌')
+				print('Retornando ao menu principal...')
+				print('')
+
+		elif opcao == 7:
+			try:
+				saida_hotel_pet()
+			except ValueError as e:
+				print(f'❌ Erro: {e} ❌')
+				print('Retornando ao menu principal...')
+				print('')
+
+		elif opcao == 8:
+			try:
+				listagem_hotel_pet()
 			except ValueError as e:
 				print(f'❌ Erro: {e} ❌')
 				print('Retornando ao menu principal...')
