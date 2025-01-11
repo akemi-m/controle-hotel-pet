@@ -8,23 +8,15 @@ Este projeto tem como objetivo proporcionar uma interface amigável e funcional 
 
 ## Funcionalidades
 
-**Adicionar Pet**: Registra um novo pet no sistema.
-
-**Editar Pet**: Permite alterar informações de um pet cadastrado.
-
-**Consultar Pet**: Exibe os dados de um pet específico.
-
-**Listar Pets**: Mostra todos os pets cadastrados.
-
-**Excluir Pet**: Remove um pet do sistema.
-
-**Entrada no Hotel Pet**: Registra a entrada de um pet no hotel para hospedagem.
-
-**Saída do Hotel Pet**: Finaliza a hospedagem e calcula o custo total.
-
-**Listagem do Hotel Pet**: Exibe os pets atualmente hospedados e o histórico de hospedagens.
-
-**Consultar Preços**: Mostra os preços de hospedagem por porte do pet.
+- **Adicionar Pet**: Registra um novo pet no sistema.
+- **Editar Pet**: Permite alterar informações de um pet cadastrado.
+- **Consultar Pet**: Exibe os dados de um pet específico.
+- **Listar Pets**: Mostra todos os pets cadastrados.
+- **Excluir Pet**: Remove um pet do sistema.
+- **Entrada no Hotel Pet**: Registra a entrada de um pet no hotel para hospedagem.
+- **Saída do Hotel Pet**: Finaliza a hospedagem e calcula o custo total.
+- **Listagem do Hotel Pet**: Exibe os pets atualmente hospedados e o histórico de hospedagens.
+- **Consultar Preços**: Mostra os preços de hospedagem por porte do pet.
 
 ## Detalhes de Configuração
 
