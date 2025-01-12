@@ -40,7 +40,7 @@ python -m pip install mysql-connector-python
 
 1. Crie o banco de dados utilizando o arquivo `script.sql` fornecido com o projeto. Ele contém as instruções para criar o banco de dados e a tabela necessária para o funcionamento do sistema.
 
-2. No arquivo `util.py`, substitua a linha com os dados do seu MySQL:
+2. No arquivo `util.py`, substitua a linha 10 com os dados do seu MySQL:
 
 ```python
 engine = create_engine('mysql+mysqlconnector://<user>:<password>@<host>[:<port>]/<dbname>')

@@ -7,8 +7,7 @@ from porte import Porte
 from hospedado import Hospedado
 from resposta import Resposta
 
-# engine = create_engine('mysql+mysqlconnector://<user>:<password>@<host>[:<port>]/<dbname>')
-engine = create_engine('mysql+mysqlconnector://root:root@localhost/hotel-pet')
+engine = create_engine('mysql+mysqlconnector://<user>:<password>@<host>[:<port>]/<dbname>')
 
 def adicionar_pet():
 
@@ -313,9 +312,9 @@ def consultar_pet():
 	print('')
 
 	nome_tutor_input = input('\t🐾 Nome do tutor: ')
-	print('')
 
 	if nome_tutor_input == '':
+		print('')
 		raise ValueError('O nome do tutor não pode estar vazio.')
 
 	with Session(engine) as sessao:
@@ -327,9 +326,11 @@ def consultar_pet():
 			pet = sessao.execute(text("SELECT id, nome_tutor, tipo_pet, nome_pet, raca_pet, porte_pet FROM pets WHERE nome_tutor = :nome_tutor"), parametros).first()
 
 		except IntegrityError as ex:
+			print('')
 			print(f'❌ Ocorreu um erro de rede ao consultar o pet. ❌\n')
 
 		if pet is None:
+			print('')
 			raise ValueError(f'Nome do tutor "{nome_tutor_input}" não encontrado!')
 		else:
 			print(f'\t🐾 Id: {pet.id}')
@@ -374,28 +375,72 @@ def excluir_pet():
 	if nome_tutor_input == '':
 		print('')
 		raise ValueError('O nome do tutor não pode estar vazio.')
-
-	with Session(engine) as sessao, sessao.begin():
+	
+	with Session(engine) as sessao:
 		parametros = {
 			'nome_tutor': nome_tutor_input
 		}
 
 		try:
-			resultado = sessao.execute(text("DELETE FROM pets WHERE nome_tutor = :nome_tutor"), parametros)
+			pet = sessao.execute(text("SELECT id, nome_tutor, tipo_pet, nome_pet, raca_pet, porte_pet FROM pets WHERE nome_tutor = :nome_tutor"), parametros).first()
 
 		except IntegrityError as ex:
 			print('')
-			print(f'❌ Ocorreu um erro de rede ao excluir o pet. ❌')
-			print('')
+			print(f'❌ Ocorreu um erro de rede ao excluir o pet. ❌\n')
 
-		if resultado.rowcount == 0:
+		if pet is None:
 			print('')
 			raise ValueError(f'Tutor "{nome_tutor_input}" não encontrado, efetue o cadastro primeiro.')
 		else:
+			print(f'\t🐾 Id: {pet.id}')
+			print(f'\t🐾 Tipo: {pet.tipo_pet}')
+			print(f'\t🐾 Nome do pet: {pet.nome_pet}')
+			print(f'\t🐾 Raça: {pet.raca_pet}')
+			print(f'\t🐾 Porte: {pet.porte_pet}\n')
 			print('')
-			print(f'✅ Pet excluído com sucesso! ✅')
 
+	aux_exclusao_input = input('\t\t Confirmar exclusão do pet? (Sim ou Não): ')
+	
+	exclusao_verificado = None
+	if aux_exclusao_input.lower() in ['sim', 's']:
+		exclusao_verificado = Resposta.SIM
+	elif aux_exclusao_input.lower() in ['não', 'nao', 'n']:
+		exclusao_verificado = Resposta.NAO
+	elif aux_exclusao_input == '':
 		print('')
+		raise ValueError('A resposta não pode estar vazia.')
+	else:
+		print('')
+		raise ValueError('Resposta inválida.')
+	
+	exclusao_input = Resposta(exclusao_verificado)
+
+	if exclusao_input.value == 'Sim':
+		with Session(engine) as sessao, sessao.begin():
+			parametros = {
+				'nome_tutor': nome_tutor_input
+			}
+
+			try:
+				resultado = sessao.execute(text("DELETE FROM pets WHERE nome_tutor = :nome_tutor"), parametros)
+
+			except IntegrityError as ex:
+				print('')
+				print(f'❌ Ocorreu um erro de rede ao excluir o pet. ❌')
+
+			if resultado.rowcount == 0:
+				print('')
+				raise ValueError(f'Tutor "{nome_tutor_input}" não encontrado, efetue o cadastro primeiro.')
+			else:
+				print('')
+				print(f'✅ Pet excluído com sucesso! ✅')				
+		print('')
+
+	if exclusao_input.value == 'Não':
+		print('')
+		print('Retornando ao menu principal...')
+		print('')
+
 
 def entrada_hotel_pet():
 
@@ -403,7 +448,6 @@ def entrada_hotel_pet():
 	print('')
 
 	nome_tutor_input = input('\t🐾 Nome do tutor: ')
-	print('')
 	if nome_tutor_input == '':
 		raise ValueError('O nome do tutor não pode estar vazio.')
 
