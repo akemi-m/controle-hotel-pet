@@ -7,7 +7,8 @@ from porte import Porte
 from hospedado import Hospedado
 from resposta import Resposta
 
-engine = create_engine('mysql+mysqlconnector://<user>:<password>@<host>[:<port>]/<dbname>')
+# engine = create_engine('mysql+mysqlconnector://<user>:<password>@<host>[:<port>]/<dbname>')
+engine = create_engine('mysql+mysqlconnector://root:root@localhost/hotel-pet')
 
 def adicionar_pet():
 
@@ -155,8 +156,10 @@ def editar_pet():
 	if nome_tutor_input.value == 'Sim':
 		nome_tutor_editado = input('\t🐾 Novo nome do tutor: ')
 		print('')
+
 		if nome_tutor_editado == '':
 			raise ValueError('A resposta do nome do tutor não pode estar vazia.')
+			
 	else:
 		nome_tutor_editado = pesquisa_tutor[0]
 		print('')
@@ -185,7 +188,7 @@ def editar_pet():
 
 		if aux_tipo_pet.lower() in ['gato', 'g']:
 			tipo_verificado = Tipo.GATO
-		elif aux_tipo_pet in ['cachorro', 'c']:
+		elif aux_tipo_pet.lower() in ['cachorro', 'c']:
 			tipo_verificado = Tipo.CACHORRO
 		elif aux_tipo_pet == '':
 			raise ValueError('O tipo do pet não pode estar vazio.')
@@ -203,7 +206,7 @@ def editar_pet():
 	nome_pet_verificado = None
 	if aux_nome_pet_input.lower() in ['sim', 's']:
 		nome_pet_verificado = Resposta.SIM
-	elif aux_nome_pet_input in ['não', 'nao', 'n']:
+	elif aux_nome_pet_input.lower() in ['não', 'nao', 'n']:
 		nome_pet_verificado = Resposta.NAO
 	elif aux_nome_pet_input == '':
 		print('')
@@ -396,7 +399,7 @@ def excluir_pet():
 			print(f'\t🐾 Tipo: {pet.tipo_pet}')
 			print(f'\t🐾 Nome do pet: {pet.nome_pet}')
 			print(f'\t🐾 Raça: {pet.raca_pet}')
-			print(f'\t🐾 Porte: {pet.porte_pet}\n')
+			print(f'\t🐾 Porte: {pet.porte_pet}')
 			print('')
 
 	aux_exclusao_input = input('\t\t Confirmar exclusão do pet? (Sim ou Não): ')
@@ -570,7 +573,6 @@ def saida_hotel_pet():
 	print('')
 
 	nome_tutor_input = input('\t🐾 Nome do tutor: ')
-	print('')
 	if nome_tutor_input == '':
 		raise ValueError('O nome do tutor não pode estar vazio.')
 
@@ -679,6 +681,7 @@ def saida_hotel_pet():
 		if dados_resposta_input.value == 'Não':
 			print('Retornando ao menu principal...')
 			print('')
+			return
 
 	if dados_resposta_input.value == 'Não':
 		print('Retornando ao menu principal...')
