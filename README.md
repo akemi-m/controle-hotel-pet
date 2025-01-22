@@ -1,8 +1,8 @@
-# Simulação de Controle para Hotel Pet
+# Controle Hotel Pet
 
 ## Descrição do Projeto
 
-O "Simulação de Controle para Hotel Pet" é um sistema desenvolvido para gerenciar as atividades de um hotel para pets, incluindo cadastro, edição, consulta, listagem e hospedagem de animais.
+O "Controle Hotel Pet" é um sistema desenvolvido para gerenciar as atividades de um hotel para pets, incluindo cadastro, edição, consulta, listagem e hospedagem de animais.
 
 Este projeto tem como objetivo proporcionar uma interface amigável e funcional para o gerenciamento eficiente de informações relacionadas aos pets e seus tutores.
 
