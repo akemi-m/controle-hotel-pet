@@ -8,7 +8,6 @@ from hospedado import Hospedado
 from resposta import Resposta
 
 # engine = create_engine('mysql+mysqlconnector://<user>:<password>@<host>[:<port>]/<dbname>')
-engine = create_engine('mysql+mysqlconnector://root:root@localhost/hotel-pet')
 
 def adicionar_pet():
 
